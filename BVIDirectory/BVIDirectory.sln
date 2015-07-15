@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "BVIDirectory", "D:\LiveApps\UnliveApps\BVIDirectory\", "{0EB001F0-7E8B-4D08-8A7D-9889D9A7862E}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "3.5"
+		Debug.AspNetCompiler.VirtualPath = "/BVIDirectory"
+		Debug.AspNetCompiler.PhysicalPath = "..\BVIDirectory\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\BVIDirectory\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/BVIDirectory"
+		Release.AspNetCompiler.PhysicalPath = "..\BVIDirectory\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\BVIDirectory\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "61998"
+		DefaultWebSiteLanguage = "Visual Basic"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|.NET = Debug|.NET
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EB001F0-7E8B-4D08-8A7D-9889D9A7862E}.Debug|.NET.ActiveCfg = Debug|.NET
+		{0EB001F0-7E8B-4D08-8A7D-9889D9A7862E}.Debug|.NET.Build.0 = Debug|.NET
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

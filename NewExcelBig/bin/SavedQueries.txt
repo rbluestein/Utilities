@@ -1,0 +1,590 @@
+select * from codes_bviproduct
+select * from config_clientproduct
+select * from config_clientsubproduct
+select * from clientproduct_extended order by clientid
+
+SELECT CHARINDEX('bicycle', 'thebicycle')  -- returns 4
+CHARINDEX ( LookFor , LookIn[ , start_location ] )
+(dateadd(hour,(-5),getutcdate()))
+
+select * from webaces..errorlog where adddate > dateadd(dd, -2, getdate())
+order by adddate desc
+
+select PrecAddDate =  CONVERT(varchar(33), AddDate, 121),* from webaces..errorlog where adddate > dateadd(dd, -2, getdate())
+order by adddate desc
+
+select ti.empid, eew.LatestEndDate
+from testids ti
+inner join 
+(select empid, LatestEndDate = Max(enddate) 
+from empenrollwin group by empid) eew
+on eew.empid = ti.empid
+order by eew.LatestEndDate desc
+
+select 
+CONVERT(VARCHAR(8), aps.adddate, 1) AS [MM/DD/YY],
+aps.clientid, apd.fieldname, apd.fielddata,  aps.productid, bud='hi'
+from appsandpolssummary aps 
+inner join appsandpolsdata apd on aps.adddate>'9/1/2012' and aps.appid=apd.appid and 
+aps.productid = 'allstateul'
+order by aps.adddate desc 
+
+select * from usermanagement..users where  userid = 'rsmith'
+
+delete wa_checkout where empid = '9999990'
+select * from  wa_checkout order by checkouttime desc
+update wa_checkout set checkouttime = (dateadd(hour,(-5),getutcdate())) where empid ='9999995'
+select * from wa_checkout where empid = '9999994'
+select * from wa_checkout order by checkouttime desc
+update wa_checkout set checkouttime = null where empid = ''
+delete wa_checkout where empid = '9999991'
+select * from wa_checkout where empid = '9999999'
+update wa_checkout set enrollerid = null, sessionmode = 'Emp', enrsessionid=null, enractivityid = null where empid = '9999999'
+SET EnrCheckoutTime = DateAdd(hour, (-5), GetUtcDate())
+
+update wa_checkout SET EmpCheckoutTime = DateAdd(mi, (-55), getUtcDate())
+where empid = '3202985'
+
+update wa_checkout SET EmpCheckoutTime = 
+(SELECT DateAdd(mi, (-55),EmpCheckoutTime) From wa_checkout where empid = '3202985') 
+where empid = '3202985'
+
+year: yy , yyyy
+quarter: qq , q
+month: mm , m
+dayofyear:dy , y
+day: dd , d
+week: wk , ww
+weekday: dw , w
+hour: hh
+minute: mi , n
+second: ss , s
+millisecond: ms
+microsecond: mcs
+nanosecond: ns
+
+
+
+
+declare @EmpID varchar(20)
+set @EmpID = '9999993'
+delete empactivitylog 
+where activityid = (select activityid from wa_checkout where empid = @EmpID)
+delete wa_checkout  where empid=@EmpID
+
+
+select AddDate, * from webaces..errorlog where adddate > dateadd(dd, -2, getdate())
+order by adddate desc
+
+select AddDate, * from webaces..errorlog where adddate > dateadd(dd, -8, getdate())
+and charindex('2604', errormessage)>0
+order by adddate desc
+
+select top 200 e.EmpID, e.LastName, e.FirstName, d.DepID, d.FirstName from v_employee e 
+Inner join empenrollwin w on e.empid=w.empid and w.enddate>getdate() 
+inner join empdependent d on e.empid=d.empid and d.active=1
+where substring(e.LastName, 1, 1) = 'W'
+order by e.EmpID, d.DepID
+
+Declare @Sql varchar(500)
+Declare @ClientID varchar(16)
+Set @ClientID = 'UserManagement'
+Set @Sql = 'Select ClientID = ''' + @ClientID + ''' , LastName from ' + @clientid + '.dbo.Users where userid = ''rbluestein'''
+exec (@Sql)
+
+******************************************************
+
+Select Name = e.LastName + ', ' + e.FirstName, el.* 
+from webaces..errorlog el 
+left join Weathershield_WA..Employee e on el.EmpID = e.EmpID
+where el.adddate > '02/13/2012 23:59'
+
+*******************************************************
+	Much more flexible than distinct
+select rch.EnrollerID, Sum(rch.Enrolled)
+from rpt_callhistory rch
+group by rch.EnrollerID
+Having sum(rch.Enrolled) = 0
+Order by Sum(rch.Enrolled)
+Order by enrollerid
+
+
+select EnrollerID, 
+TotalHours = Sum(TotalHours),
+EnrollHours = Sum(EnrollHours),
+AdminHours = Sum(AdminHours), 
+CoachHours = Sum(CoachHours),
+TrainHours = Sum(TrainHours)
+from EnrollerDateProject
+where ProjectDate >= '11/16/2011' and ProjectDate < '11/17/2011' and EnrollerID IN ('mwalker', 'rcerutti', 'rgoss') 
+group by EnrollerID
+having Sum(TotalHours) > 9 
+Order by EnrollerID
+
+********************************************************
+
+********************************************************
+	Basic ProjectReports query
+use projectreports
+select * from EmpTransmittal et
+inner join EmpProductTransmittal ept
+on et.ActivityID = ept.ActivityID
+where dbo.ufn_IsDateEqual(et.callstarttime, '2/22/2011')=1
+and et.clientid= 'bureauveritas' order by productid
+***************************************************************************************************************************************
+	Change Date
+
+use projectreports
+update EmpTransmittal SET 
+CallStartTime = DateAdd(d, 4, CallStartTime), 
+CallEndTime = DateAdd(d, 4, CallEndTime), 
+EnrollerApprovalDate= DateAdd(d, 4, EnrollerApprovalDate),
+EnrollDate= DateAdd(d, 4, EnrollDate), 
+ChangeDate = DateAdd(hh, -5, GETUTCDATE()) 
+where
+enrollerid = 'gmallas' and activityid in ('bf8f51d5-a7d6-46dc-b3b2-6db6f5f35b58', '18602a09-ecf8-425a-bf8e-858c46b025e5', 'ce715c4f-6f99-4efa-a475-9b670ca33e77')
+
+select 
+* from EmpProductTransmittal where
+activityid in ('bf8f51d5-a7d6-46dc-b3b2-6db6f5f35b58', '18602a09-ecf8-425a-bf8e-858c46b025e5', 'ce715c4f-6f99-4efa-a475-9b670ca33e77')
+
+update EmpProductTransmittal SET 
+EnrollDate= DateAdd(d, 4, EnrollDate),
+ChangeDate = DateAdd(hh, -5, GETUTCDATE()) 
+where
+activityid in ('bf8f51d5-a7d6-46dc-b3b2-6db6f5f35b58', '18602a09-ecf8-425a-bf8e-858c46b025e5', 'ce715c4f-6f99-4efa-a475-9b670ca33e77')
+*******************************************************************************************************************************************
+
+
+
+
+select 
+Range = '1/1/2010 - 12/31/2010',  
+rch.ClientID, 
+Interviewed = sum(rch.Interviewed), 
+Enrolled = sum(rch.Enrolled), 
+TotalHours = sum(rch.TotalHours), 
+TotalManDays = Sum(rch.TotalHours)/8,
+InterviewsPerManDay = Sum(rch.Interviewed) / (Sum(rch.TotalHours) / 8),
+
+AnnualPremium = 
+(Select sum(convert(decimal, fielddata)) 
+from rpt_producthistory rph 
+where rph.ClientID = rch.ClientID and dbo.ufn_IsDateBetween(rph.CallDate, '1/1/2010', '12/31/2010')=1
+and rph.FieldName = 'AnnualPremium'),
+
+PremiumPerManDay  = case
+when Sum(rch.TotalHours) = 0 then 0
+
+else 
+(
+(Select sum(convert(decimal, fielddata)) 
+from rpt_producthistory rph 
+where rph.ClientID = rch.ClientID and dbo.ufn_IsDateBetween(rph.CallDate, '1/1/2010', '12/31/2010')=1
+and rph.FieldName = 'AnnualPremium')  /  (Sum(rch.TotalHours)/8)
+)
+end
+
+from rpt_callhistory  rch
+where dbo.ufn_IsDateBetween(rch.CallDate, '1/1/2010', '12/31/2010')=1
+and rch.clientid <> 'options|choices'
+group by rch.clientid
+
+
+
+*** Num tries > 1 ***
+
+Select 
+cm.TicketNumber, ClientID,
+NumTries = (Select Count (*) from CallbackAttempt where CallbackID = cm.CallbackID), 
+EmpName = cm.EmpLastName + ', ' + cm.EmpFirstname, 
+Status = dbo.ufn_GetStatusCodeAdj(0, cm.CallbackID, getDate())
+FROM CallbackMaster cm
+WHERE cm.ClientID = 'Stantec'  and
+(Select Count (*) FROM CallbackAttempt where CallbackID = cm.CallbackID) > 1
+and dbo.ufn_GetStatusCodeAdj(0, cm.CallbackID, getDate()) <> 'CLOS'
+ORDER BY cm.EmpLastName + cm.EmpFirstName
+
+
+
+*** Are the reset enrollment window closed dates holding?
+
+select  distinct cm.ClientID, cm.EnrollWinEndDate, Num = (select count (*) from callbackmaster where clientid = cm.clientid and isnull(enrollwinenddate, '1/1/2011')  = isnull(cm.enrollwinenddate, '1/1/2011'))
+FROM CallbackMaster cm
+where clientid in ('Stantec', 'SFWMD', 'Weathershield', 'Martinrea', 'Diopitt')
+
+ WHERE ClientID = 'Diopitt'
+
+select count (*) from CallbackMaster_BK_20101210
+
+UPDATE CALLBACKMASTER SET ENROLLWINENDDATE = '12/23/2010' WHERE CLIENTID = 'Martinrea' and enrollwinenddate = '12/17/2010' and logicaldelete = 0
+update martinrea..empenrollwin set enddate = '12/23/2010' where enddate = '12/17/2010'
+
+
+select distinct clientid, enrollwinenddate from callbackmaster order by clientid, enrollwinenddate
+
+
+
+** Beth CallMonitor query  **
+SELECT MonitorName = u.LastName + ', ' + u.FirstName,
+EnrollerName = u2.LastName + ', ' + u2.FirstName,
+et.CallStartTime, et.CallEndTime, 
+Enrolled = (SELECT Count (*) FROM EmpProductTransmittal WHERE ActivityID = p.ActivityID),
+p.ReviewDate, et.ClientID, p.OverallGrade
+FROM CallMonitorParent p
+INNER JOIN EmpTransmittal et ON p.ActivityID = et.ActivityID
+INNER JOIN UserManagement..Users u ON p.MonitorUserID = u.UserID
+INNER JOIN UserManagement..Users u2 ON et.EnrollerID = u2.UserID
+WHERE p.ReviewDate > '9/30/2010'
+ORDER BY p.ReviewDate
+
+
+sp_executesql
+http://msdn.microsoft.com/en-us/library/ms188001.aspx
+
+
+** Jon Snavely ***
+SELECT cm.CallbackID, cm.CreationDate, TicketNumber =  Substring(Cast(cm.TicketNumber as varchar(6)), 1, 2) + '-' + Substring(Cast(cm.TicketNumber as varchar(6)), 3, 4) , EmpName = EmpLastName + ', ' + EmpFirstName + ' ' + EmpMI , EmpLastName, EmpFirstName, ClientID = cm.ClientID, State = cm.State, CallPurposeCode = cm.CallPurposeCode, CallPurposeDescription = ccp.CallPurposeDescription, PriorityTagInd, cp.BestTime, cm.PreferSpanishInd, NumAttempts = (SELECT Count (*) 
+FROM CallbackAttempt ca 
+WHERE ca.CallbackID = cm.CallbackID AND
+ca.LogicalDelete = 0), LastActivityDate =  dbo.ufn_GetLastActivityDate(cm.CallbackID), cm.NumEmployeeCalls, DaysRemaining = case when cm.EnrollWinEndDate IS NULL then 'No win' else Cast((SELECT DateDiff(d, getDate(), cm.EnrollWinEndDate)) as varchar(10)) end, NewAttemptInd = case when dbo.ufn_GetStatusCodeAdj(0, cm.CallbackID, getDate()) <> 'TC' then '1' else '0' end, StatusCodeAdjDetail = dbo.ufn_GetStatusCodeAdj(1, cm.CallbackID, getDate()) 
+FROM CallbackMaster cm 
+INNER JOIN Codes_CallPurpose ccp ON cm.CallPurposeCode = ccp.CallPurposeCode LEFT JOIN CallbackPhone cp ON cm.CallbackID = cp.CallbackID AND
+cp.Seq = 1  
+WHERE cm.LogicalDelete = 0 
+ORDER BY CreationDate DESC
+
+
+
+SELECT * FROM IAMS..AppsAndPolsSummary aps
+LEFT JOIN IAMS..AppsAndPolsData apd on aps.AppID = apd.AppID
+WHERE
+aps.ClientID = 'Diopitt' AND
+aps.ProductID = 'AllstateUL'
+
+
+EXEC sp_MSForEachDB 'select * from [?]..sysobjects'
+
+
+SELECT * from information_schema.tables where table_type='BASE TABLE'
+
+
+Sandy Boothe Fulton problem
+
+update projectreports..emptransmittal 
+set lastname = 'Brooks', firstname = 'Sanford Mark', 
+ssn='256612998'
+where activityid = 'b46bccf7-0989-4f5b-b46d-320eeeaafc5d'
+
+
+SELECT  TOP 1 eal.EmpID, eal.AddDate, eal.EnrollWinCode, Convert(varchar(20), eal.AddDate,120) , eew.*
+FROM EmpActivityLog eal
+
+LEFT JOIN EmpEnrollWin eew ON eal.ActivityID = eew.ActivityID
+
+
+WHERE eal.EMPID = '02002119' 
+AND eal.EnrollWinCode IS NOT NULL AND Len(eal.EnrollWinCode) > 1
+ORDER BY Convert(varchar(20), eal.AddDate,120) DESC
+
+
+
+select top 10 * from empactivitylog
+SELECT  top 10 * FROM EmpEnrollWin
+
+
+select distinct top 500 empid from empactivitylog
+
+select eal.*, eew.*
+FROM EmpActivityLog eal
+INNER JOIN EmpEnrollWin eew ON eal.ActivityID = eew.ActivityID
+
+
+
+
+            Dim querypack As DBase.QueryPack
+            Dim sb As New System.Text.StringBuilder
+            sb.Append("UPDATE UserManagement..UserAppointments SET ")
+            sb.Append("statuscode = 'T', ")
+            sb.Append("StatusCodeLastChangeDate = '" & Common.GetServerDateTime & "', ")
+            sb.Append("ChangeDate = '" & Common.GetServerDateTime & "' ")
+            sb.Append("WHERE ")
+            sb.Append("userid IN ('tadamski' , 'cbailey', 'pblack', 'rbryant', 'lcarlton' , 'kcarter', 'scoleman', 'scollins', 'ccoutee', 'hdavis', 'pgray', 'jharris', 'srichard', 'wrichardson', 'gschlabach', 'strahan', 'mwalker', 'dwaterbury') ")
+            sb.Append("AND ")
+            sb.Append("CarrierID = 'AllState' AND StatusCode = 'X'")
+            querypack = Common.ExecuteNonQueryWithQuerypack(sb.ToString)
+
+
+
+SELECT et.*, ept.* 
+FROM EmpTransmittal et
+LEFT JOIN EmpProductTransmittal ept
+ON et.ActivityID = ept.ActivityID
+WHERE 
+et.LastName IN ('Longfellow', 'T''est')
+and dbo.ufn_IsDateEqual(et.callstarttime, '3/17/2010')=1
+
+
+////////////////////////////////////////////////////
+Update with join
+UPDATE ua
+SET StatusCode_Test = 'T'
+FROM UserAppointments ua
+INNER JOIN UserLicenses ul ON (ua.UserID = ul.UserID AND ua.State = ul.State)
+WHERE ul.UserID = 'rbluestein'
+
+
+////////////////////////////////////////////////////
+SELECT * INTO " & cCallTableName & " FROM EmpTransmittal 
+WHERE 
+Convert(varchar, CallStartTime, 101) BETWEEN '" & cFromDate & "' AND '" & cToDate & "' 
+ORDER BY CONVERT(varchar(19), CallStartTime,  120)"
+
+
+
+////////////////////////////////////////////////////
+DELETE EmpTransmittal 
+WHERE 
+LastName IN ('Longfellow', 'T''est')
+and dbo.ufn_IsDateEqual(callstarttime, '3/17/2010')=1
+
+
+////////////////////////////////////////////////////
+DELETE UNWANTED RECORDS FROM REPORT TABLES
+
+
+FIRST
+Select et.ActivityID, ept.AppID, alt.AltProductDataID
+FROM EmpTransmittal et
+LEFT JOIN EmpProductTransmittal ept ON et.ActivityID = ept.ActivityID
+LEFT JOIN Alt_ProductData alt ON ept.AltProductDataID = alt.AltProductDataID
+WHERE et.ActivityID IN
+
+(
+'BC4AEC8E-BED2-42BD-BD4F-292AF40293A6',
+'9CCDEC66-CF8C-40F7-827C-4096BC68575A',
+'552204E7-44C0-4D71-8E83-AE7D9BDA3CB6',
+'ACE3808B-4224-44BB-B1B5-BC494E2405E0'
+)
+
+SECOND
+Delete EmpTransmittal
+WHERE ActivityID IN
+(
+'BC4AEC8E-BED2-42BD-BD4F-292AF40293A6',
+'9CCDEC66-CF8C-40F7-827C-4096BC68575A',
+'552204E7-44C0-4D71-8E83-AE7D9BDA3CB6',
+'ACE3808B-4224-44BB-B1B5-BC494E2405E0'
+)
+
+
+
+
+
+
+SELECT DISTINCT RelationCode, 
+Count = (SELECT Count (*) FROM Alt_ProductData WHERE RelationCode = alt.RelationCode)
+FROM Alt_ProductData alt
+
+
+SELECT * FROM IAMS..AppsAndPolsSummary
+WHERE
+dbo.ufn_IsDateEqual(AddDate, '3/19/2010') = 1
+and licensedenroller = 'flinden'
+
+
+
+///////////////////////
+SELECT 
+DISTINCT 
+case 
+--when IsNULL(Tier, 'nullvalue')
+when Tier is null then 'nullvalue'
+when Tier = '' then 'empty'
+else Tier
+end,
+
+Count = (SELECT Count (*) FROM Alt_ProductData WHERE Tier= alt.Tier)
+FROM Alt_ProductData alt
+
+update EmpProductTransmittal
+Set 
+RelationCode = null,
+InsuredName = null,
+Tier = null,
+ClientSubProductID = null
+
+
+/////////////////////////
+Subtotal counts
+
+Select distinct calldate, 
+Count = 
+(Select Count (*) FROM Rpt_ProductHistory r2 Where CallDate = r1.CallDate)  
+from Rpt_ProductHistory r1 
+order by r1.calldate desc  
+
+
+////////////////////////
+UPDATE UserManagement..Users
+SET Role = 'IT', LocationID = 'REM'
+WHERE UserID = 'rbluestein'
+
+
+////////////////////////////////////
+Select * from EmpTransmittal
+WHERE dbo.ufn_IsDateEqual(CallStartTime, '3/11/2010')=1
+and lastname = 'Waniewski'
+
+delete EmpTransmittal where activityid = '11851877-906f-45d9-906c-cdc0178a3e5e'
+
+
+delete EmpProductTransmittal where activityid = '11851877-906f-45d9-906c-cdc0178a3e5e'
+
+
+SELECT * FROM IAMS..AppsAndPolsSummary WHERE activityid = 'ba15e82f-dbd3-41f5-81cc-f9f67dd83de5'
+
+
+
+
+Terry Fuzee Options report
+
+
+SELECT 
+
+Name = u.LastName + ', ' + u.FirstName, 
+
+Interviewed = (SELECT Count (*) FROM ProjectReports..EmpTransmittal 
+WHERE EnrollWinCode <> 'BC' AND ActivityTypeCode = 'CALL'  AND ClientID =  'Options' 
+AND LogicalDelete = 0 AND EnrollerID = u.UserID 
+AND dbo.ufn_IsDateBetween(CallStartTime, '1/1/2010', '11/29/2010') = 1 AND 
+SupervisorApprovalDate IS NOT NULL ),  
+
+ULApps = (SELECT Count (*)  FROM EmpProductTransmittal ept  
+INNER JOIN ProjectReports..EmpTransmittal et ON ept.ActivityID = et.ActivityID 
+WHERE ept.ProductID = 'TMARKUL2' AND 
+ept.ClientID =  'Options'  AND ept.LogicalDelete = 0 AND 
+ept.LicensedEnroller = u.UserID AND dbo.ufn_IsDateBetween(et.CallStartTime, '1/1/2010', '11/29/2010') = 1 AND 
+et.SupervisorApprovalDate IS NOT NULL ), 
+
+ULPremium = (SELECT ROUND(ISNULL(SUM(ISNULL(ept.AnnualPremium,0)),0), 0)  
+FROM EmpProductTransmittal ept INNER JOIN ProjectReports..EmpTransmittal et ON ept.ActivityID = et.ActivityID  
+WHERE ept.ProductID = 'TMARKUL2' AND ept.ClientID =  'Options'  AND 
+ept.LogicalDelete = 0 AND ept.LicensedEnroller = u.UserID AND
+dbo.ufn_IsDateBetween(et.CallStartTime, '1/1/2010', '11/29/2010') = 1 AND
+et.SupervisorApprovalDate IS NOT NULL ), 
+
+ULEZValue = (SELECT Count (*) 
+FROM EmpProductTransmittal ept 
+INNER JOIN ProjectReports..EmpTransmittal et ON ept.ActivityID = et.ActivityID 
+WHERE ept.ProductID = 'TMARKUL2' AND
+ept.ClientID =  'Options'  AND
+ept.LogicalDelete = 0 AND
+ept.LicensedEnroller = u.UserID AND
+dbo.ufn_IsDateBetween(et.CallStartTime, '1/1/2010', '11/29/2010') = 1 AND
+et.SupervisorApprovalDate IS NOT NULL ), 
+
+TotalPremium = (SELECT ROUND(ISNULL(SUM(ISNULL(ept.AnnualPremium,0)),0), 0) 
+FROM EmpProductTransmittal ept 
+INNER JOIN ProjectReports..EmpTransmittal et ON ept.ActivityID = et.ActivityID 
+WHERE ept.ProductID = 'TMARKUL2' AND
+ept.ClientID =  'Options' AND
+ept.LogicalDelete = 0 AND
+ept.LicensedEnroller = u.UserID AND
+dbo.ufn_IsDateBetween(et.CallStartTime, '1/1/2010', '11/29/2010') = 1 AND
+et.SupervisorApprovalDate IS NOT NULL )     
+
+FROM UserManagement..Users u 
+WHERE (SELECT Count(*) 
+FROM ProjectReports..EmpTransmittal etMain 
+WHERE etMain.EnrollWinCode <> 'LU' AND
+etMain.ClientID =  'Options'  AND
+etMain.LogicalDelete = 0 AND
+etMain.EnrollerID = u.UserID AND
+dbo.ufn_IsDateBetween(etMain.CallStartTime, '1/1/2010', '11/29/2010') = 1 AND
+etMain.SupervisorApprovalDate IS NOT NULL ) > 0  OR (SELECT Count(*) 
+FROM ProjectReports..EmpProductTransmittal eptMain 
+INNER JOIN ProjectReports..EmpTransmittal etMain on eptMain.ActivityID = etMain.ActivityID 
+WHERE eptMain.ClientID =  'Options'  AND
+eptMain.LogicalDelete = 0 AND
+eptMain.LicensedEnroller = u.UserID AND
+dbo.ufn_IsDateBetween(etMain.CallStartTime, '1/1/2010', '11/29/2010') = 1 AND
+etMain.SupervisorApprovalDate IS NOT NULL ) > 0 
+ORDER BY u.LastName + u.FirstName
+
+
+
+ **** Call monitor  CallMonitor *** 
+Select 
+--c.ActivityID,
+c.ReviewDate,
+Monitor = u.LastName + ', ' + u.FirstName,
+Enroller = u2.LastName + ', ' + u2.FirstName,
+c.OverallGrade, 
+SummaryNotes
+from CallMonitorParent c
+inner join UserManagement..Users u on c.MonitorUserID = u.UserID
+inner join EmpTransmittal et on c.ActivityID = et.ActivityID
+inner join UserManagement..Users u2 on et.EnrollerID = u2.userID
+where c.LogicalDelete = 0
+Order By u.LastName, u.FirstName, u2.LastName, u2.FirstName
+
+*****************************************************************
+DECLARE @StartDate datetime
+
+DECLARE @EndDate datetime
+SELECT @StartDAte='10/16/2011'
+SELECT @EndDate='12/31/2011'
+
+Select 
+EnrollerID,
+ManDays=SUM(DATEDIFF(mi,et.CallStartTime,et.CallEndTime)/60.0)/8.0,
+Interviews=COUNT (*),
+GetPremium=ISNULL(SUM(IAMS.MonthlyPremium),0),
+Enrollments=SUM(ISNULL(IAMS.Interviews,0)) 
+From UserManagement..Users as U
+
+INNER JOIN ProjectReports..EmpTransmittal as et
+ON
+U.UserID = Et.UserID
+AND u.ROLE in ('ENROLLER','SUPERVISOR') 
+AND u.CompanyID='BVI'
+AND et.CallStartTime BETWEEN @StartDate AND @EndDate
+AND et.CallEndTime is not NULL 
+AND et.ActivityTypeCode = 'CALL'
+
+LEFT OUTER JOIN 
+(SELECT ActivityID, MonthlyPremium=SUM(MonthlyPremium), Interviews=1
+FROM
+IAMS..Log_AppsAndPolsSummary 
+WHERE
+BVIAppStatus in ('NEW','POLICY')
+and ChangeTypeCode='INSERT'
+Group by ActivityID) 
+
+as IAMS
+
+ON
+IAMS.ActivityID=et.ActivityID
+
+
+update WA_Checkout set EmpCheckoutTime = DATEADD(hour,-1,EmpCheckoutTime), SessStartTime = DATEADD(hour,-1,SessStartTime)
+where EmpID='3202985'
+Group By EnrollerID
+Order by EnrollerID
+
+
+select * from AppsAndPolsSummary where 
+empid = '3668880' and AddDate > '5/10/2015' and productid = 'lincul'  order by AddDate desc
+
+delete AppsAndPolsSummary  where appid='20150511194744703'
+delete AppsAndPolsSummary  where appid='20150511155103723'
+
+delete AppsAndPolsData  where appid='20150511194744703'
+delete AppsAndPolsData  where appid='20150511155103723'
+
+delete ProjectReports..EmpProductTransmittal where appid='20150511194744703'
+delete ProjectReports..EmpProductTransmittal where appid='20150511155103723'
+
+delete ProjectReports..Alt_ProductData where appid='20150511194744703'
+delete ProjectReports..Alt_ProductData where appid='20150511155103723'
